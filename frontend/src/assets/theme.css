@@ -1,0 +1,141 @@
+/* color scheme from https://coolors.co/f6f7eb-e94f37-393e41-3f88c5-44bba4 */
+
+/*  */
+@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1p&family=Mukta:wght@300&display=swap');
+
+:root{
+    --color: #fff;
+    --color-primary: #ecd1ec;
+    --color-secondary: #e94f37;
+    --color-tertiary: #be6355c9;
+    --color-quaternary: #393e41;
+    --color-quinary: #3f88c5;
+    --color-senary: #44bba4;
+
+    --color-text: #fff;
+    --color-text-primary: #8b5a4d;
+    --color-text-secondary: #e94f37;
+    --color-text-tertiary: #a8200b;
+    --color-text-quaternary: #393e41;
+    --color-text-quinary: #3f88c5;
+    --color-text-senary: #44bba4;
+    
+    --header-font-size: 1.5rem;
+    --header-font-family: 'Mukta', sans-serif;
+    --header-font-weight: 300;
+    --header-font-style: normal;
+    --header-font-stretch: normal;
+    --header-line-height: 1.5;
+    --header-letter-spacing: normal;
+    --header-text-align: left;
+
+    --body-font-size: 1rem;
+    --body-font-family: 'M+PLUS+1p', sans-serif;
+    --body-font-weight: 300;
+    --body-font-style: normal;
+    --body-font-stretch: normal;
+    --body-line-height: 1.5;
+    --body-letter-spacing: normal;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: var(--header-font-family);
+    font-weight: var(--header-font-weight);
+    font-style: var(--header-font-style);
+    font-stretch: var(--header-font-stretch);
+    line-height: var(--header-line-height);
+    letter-spacing: var(--header-letter-spacing);
+    text-align: var(--header-text-align);
+}
+
+p{
+    font-family: var(--body-font-family);
+    font-weight: var(--body-font-weight);
+    font-style: var(--body-font-style);
+    font-stretch: var(--body-font-stretch);
+    line-height: var(--body-line-height);
+    letter-spacing: var(--body-letter-spacing);
+    text-align: var(--body-text-align);
+}
+
+.disabled{
+    pointer-events: none;
+    color: var(--color-text-primary);
+    background-color: rgb(100, 95, 95) !important;
+}
+
+.disabled-text{
+    color:rgb(100, 95, 95) !important;
+    pointer-events: none;
+}
+
+/* color scheme classes */
+
+.natural{
+    background-color: var(--color);
+}
+
+.primary{
+    background-color: var(--color-primary);
+}
+
+.secondary{
+    background-color: var(--color-secondary);
+}
+
+.tertiary{
+    background-color: var(--color-tertiary);
+}
+
+.quaternary{
+    background-color: var(--color-quaternary);
+}
+
+.quinary{
+    background-color: var(--color-quinary);
+}
+
+.senary{
+    background-color: var(--color-senary);
+}
+
+
+/* text color classes */
+.text-natural{
+    color: var(--color-text) !important;
+}
+
+.text-primary{
+    color: var(--color-text-primary);
+}
+
+.text-secondary{
+    color: var(--color-text-secondary);
+}
+
+.text-tertiary{
+    color: var(--color-text-tertiary);
+}
+
+.quarternary{
+    color: var(--color-text-quaternary);
+}
+
+.text-quinary{
+    color: var(--color-text-quinary);
+}
+
+.text-senary{
+    color: var(--color-text-senary) !important;
+}
+
+/* modal form */
+/* create a modal  */
+
+
+/* bootstrap table */
+
+/* input outline color  */
+
+
