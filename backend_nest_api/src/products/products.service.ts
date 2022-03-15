@@ -6,11 +6,15 @@ import { Repository } from 'typeorm';
 import { MessageEvent } from '@nestjs/common';
 import { interval, map, Observable } from 'rxjs';
 import { ManufacturersService } from 'src/manufacturers/manufacturers.service';
+import { AnyCatcher } from 'rxjs/internal/AnyCatcher';
 @Injectable()
 export class ProductsService {
+    private products:any[] = [];
+    private manufacturers:any[] = [];
     constructor(
         @InjectRepository(Products) private productsRepo: Repository<Products>,
-        private manufacturersService:ManufacturersService) {}
+        private manufacturersService:ManufacturersService,
+        ) {}
 
 
     async getAllProducts(): Promise<Products[]> {
@@ -21,21 +25,23 @@ export class ProductsService {
     }
 
     async sse(): Promise<Observable<MessageEvent>> {
-        // get products from repository and convert to array
-        const products = await this.getAllProducts()
-        const manufacturers = await this.manufacturersService.getAllManufacturers();
-        // send the products to the client every 4 seconds
-        return interval(10000).pipe(
+        
+        
+        return interval(1530).pipe(
             map(() => {
-                // data
+                const funcPro = async () => {
+                    this.products = await this.getAllProducts();
+                    this.manufacturers = await this.manufacturersService.getAllManufacturers();
+                }
+                funcPro();
                 return {
                     data: {
-                        products:[...products],
-                        manufacturers:[...manufacturers]
-                    },
-                };
-            }
-          )
+                        products: [...this.products],
+                        manufacturers: [...this.manufacturers],
+                        // message: "Products updated"
+                    }
+                }
+            }),
         );
     }
     
@@ -50,7 +56,7 @@ export class ProductsService {
         }
     }
   
-    createProduct(body: CreateProductDto){
+    async createProduct(body: CreateProductDto){
         let message="";
         try{
             const product = this.productsRepo.create(body);
@@ -60,6 +66,7 @@ export class ProductsService {
         }catch(e){
             message = "Product not created";
         }
+        // this.products = await this.getAllProducts();
         return {message:message};
     }
 
@@ -79,6 +86,7 @@ export class ProductsService {
         catch(e){
             message = "Product not updated";
         }
+        // this.products = await this.getAllProducts();
         return {message:message};
     }
 
@@ -93,6 +101,7 @@ export class ProductsService {
         catch(e){
             message = "Product not deleted";
         }
+        // this.products = await this.getAllProducts();
         return {message:message};
     }
 }

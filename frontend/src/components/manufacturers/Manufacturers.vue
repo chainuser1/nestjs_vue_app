@@ -3,7 +3,7 @@
         <!-- search navbar -->
         <nav class="navbar navbar-light bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand text-senary text-bold">Products</a>
+                <a class="navbar-brand text-senary text-bold">Manufacturers</a>
                 <a class="navbar-item text-senary ">
                     <form @submit.prevent="goToPage()">
                         <div class="input-group">
@@ -24,7 +24,7 @@
                        <i class="fa fa-plus" aria-hidden="true"></i>
                     </button>
 
-                    <button style="margin-left:1px;" @click.prevent="getProducts" type="button" class="btn btn-outline-success">
+                    <button style="margin-left:1px;" @click.prevent="getManufacturers" type="button" class="btn btn-outline-success">
                         <i class="fa fa-rotate"></i>
                     </button>
                 </form>
@@ -32,7 +32,7 @@
             </div>
         </nav>
          
-        <!-- show products table -->
+        <!-- show manufacturers table -->
         <!-- create table -->
         <loading-animation v-if="this.loading"></loading-animation>
         <table class="table table-striped "  v-if="!this.loading">
@@ -41,59 +41,49 @@
                 <tr class="text-senary">
                     <th ><a @click="sortBy('id')">ID  <i :class="this.sort.type==='id'?this.sort.class:''"></i> </a></th>
                     <th ><a @click="sortBy('name')">Name <i :class="this.sort.type==='name'?this.sort.class:''"></i></a></th>
-                    <th ><a @click="sortBy('price')">Price <i :class="this.sort.type==='price'?this.sort.class:''"></i></a></th>
-                    <th ><a @click="sortBy('stock')">Stock <i :class="this.sort.type==='stock'?this.sort.class:''"></i></a></th>
-                    <th ><a @click="sortBy('description')">Description <i :class="this.sort.type==='description'?this.sort.class:''"></i></a></th>
-                    <th ><a @click="sortBy('manufacturer')">Manufacturer<i :class="this.sort.type==='manufacturer'?this.sort.class:''"></i></a></th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <!-- tbody -->
             
             <tbody>
-                <!-- loop through products -->
+                <!-- loop through manufacturers -->
                
-                <tr class="text-secondary" :key=product.id v-for="product of productsPerPage">
-                    <!-- product id -->
-                    <td>{{ product.id }}</td>
-                    <!-- product name -->
-                    <td>{{ product.name }}</td>
-                    <!-- product price -->
-                    <td>{{ product.price }}</td>
-                    <!-- product stock -->
-                    <td>{{ product.stock }}</td>
-                    <!-- product description -->
+                <tr class="text-secondary" :key=manufacturer.id v-for="manufacturer of manufacturersPerPage">
+                    <!-- manufacturer id -->
+                    <td>{{ manufacturer.id }}</td>
+                    <!-- manufacturer name -->
+                    <td>{{ manufacturer.name }}</td>
                     
-                    <td>
-                        <a :href="`#/${product.name}`" class="text-tertiary" data-toggle="modal" data-target="#id${product.id}`" >
-                            {{ product.description.substring(0, 10) }}...
+                    
+                    <!-- <td>
+                        <a :href="`#/${manufacturer.name}`" class="text-tertiary" data-toggle="modal" data-target="#id${manufacturer.id}`" >
+                            {{ manufacturer.description.substring(0, 10) }}...
                         </a>
-                        <div class="modal fade" :id="`id${product.id}`" tabindex="-1" role="dialog" aria-labelledby="#exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" :id="`id${manufacturer.id}`" tabindex="-1" role="dialog" aria-labelledby="#exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Description: '{{product.name}}'</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">Description: '{{manufacturer.name}}'</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
                                         <p>
-                                            {{product.description}}
+                                            {{manufacturer.description}}
                                         </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </td>
-                    <!-- product manufacturer -->
-                    <td>{{ product.manufacturer.name}}</td>
-                    <td style="display:flex; flex-direction: row; ">
-                        <!-- edit product -->
-                        
-                        <a type="button" :href="`#?${product.id}/edit`" @click.prevent="actionShow('show','edit',product)" class="btn btn-outline-success senary" ><i class="fas fa-edit color-text-senary"></i></a>
-                        <!-- delete product -->&nbsp;
-                        <button class="btn btn-outline-danger" @click.prevent="deleteProduct(product)"><i class="fa fa-eraser color-text-tertiary" aria-hidden="true"></i></button>
+                    </td> -->
+                    <!-- manufacturer manufacturer -->
+                    <td>
+    
+                        <a type="button" :href="`#?${manufacturer.id}/edit`" @click.prevent="actionShow('show','edit',manufacturer)" class="btn btn-outline-success senary" ><i class="fas fa-edit color-text-senary"></i></a>
+                        <!-- delete manufacturer -->&nbsp;
+                        <button class="btn btn-outline-danger" @click.prevent="deleteManufacturer(manufacturer)"><i class="fa fa-eraser color-text-tertiary" aria-hidden="true"></i></button>
                     </td>
                 </tr>
                 
@@ -132,53 +122,43 @@
               </tr>
             </tbody>
         </table>
-        <!-- display the no of products below the table -->
+        <!-- display the no of manufacturers below the table -->
         <div class="row" v-if="!this.loading==true">
             <div class="col-12">
                 <p class="text-secondary">
-                    Showing {{this.productsPerPage.length}} of {{this.products.length}} products
+                    Showing {{this.manufacturersPerPage.length}} of {{this.manufacturers.length}} manufacturers
                     on page {{this.pages.current_page}} of {{this.totalPagesFiltered}}
                 </p>
             </div>
         </div>
-        <product-form v-if="this.action=='show'" v-bind:product="addOrUpdateProduct"
-         v-on:add-product="addProduct" v-bind:manufacturers="this.temp_manufacturers" v-on:update-product="editProduct" v-on:action-show="actionShow"></product-form>
+        <manufacturer-form v-if="this.action=='show'" v-bind:manufacturer="addOrUpdateManufacturer"
+         v-on:add-manufacturer="addManufacturer" v-bind:manufacturers="this.manufacturers" v-on:update-manufacturer="editManufacturer" v-on:action-show="actionShow"></manufacturer-form>
     </div>
 </template>
 
 <script>
 // import bootstrap modal
 
-import ProductForm from './ProductForm.vue';
+import ManufacturerForm from './ManufacturerForm.vue';
 import LoadingAnimation from '../animation/Loading.vue'
 const axios = require('axios');
 
 // const alertify = require("//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js");
 
 export default {
-    name: 'ProductPage',
+    name: 'ManufacturerPage',
     components: {
-        'product-form':ProductForm,
+        'manufacturer-form':ManufacturerForm,
         'loading-animation':LoadingAnimation
     },
-    props: ['products','manufacturers','loading'],
-    
+    props: ['manufacturers','loading'],
     data(){
         return {
-            temp_products:this.products,
             temp_manufacturers:this.manufacturers,
             action:'hide',
-            product:{
+            manufacturer:{
                 id:0,
                 name:'',
-                price:0,
-                stock:0,
-                description:'',
-                // image:'',
-                // category_id:0,
-                // manufacturer_id:0,
-                // created_at:'',
-                // updated_at:'',
             },
             filter:{
                 search:''
@@ -195,77 +175,74 @@ export default {
                 current_page:1,
                 per_page:2,
             },
-
+          
         }
     },
 
-   created(){
-       this.temp_products = this.products;
-       this.temp_manufacturers = this.manufacturers;
-       console.log(this.temp_manufacturers);
+    created(){
+        this.temp_manufacturers = this.manufacturers;
     },
-
     computed:{
-            addOrUpdateProduct(){
-                return this.product
+            addOrUpdateManufacturer(){
+                return this.manufacturer
             },
             
-            productsPerPage(){
-                let products = this.sortedProducts;
+            manufacturersPerPage(){
+                let manufacturers = this.sortedManufacturers;
                 let from = (this.pages.current_page - 1) * this.pages.per_page;
                 let to = from + this.pages.per_page;
-                return products.slice(from, to);
+                return manufacturers.slice(from, to);
             },
 
-            filteredProducts(){
+            filteredManufacturers(){
                 const search = this.filter.search.toLowerCase()
-                let products = this.temp_products
+                let manufacturers = this.temp_manufacturers
                 if (search.length > 0) {
-                    products = products.filter(product => {
-                        return product.name.toLowerCase().includes(search)
+                    manufacturers = manufacturers.filter(manufacturer => {
+                        return manufacturer.name.toLowerCase().includes(search)
                     })
 
                 }
-                // total = Math.ceil(products.length / this.pages.per_page)
+                // total = Math.ceil(manufacturers.length / this.pages.per_page)
                 // this.pages.current_page = 1
-                return products
+                return manufacturers
             },
 
             totalPagesFiltered(){
-                let products = this.sortedProducts
-                return Math.ceil(products.length / this.pages.per_page)
+                let manufacturers = this.sortedManufacturers
+                return Math.ceil(manufacturers.length / this.pages.per_page)
             },
 
-            sortedProducts(){
-                let products = this.filteredProducts
+            sortedManufacturers(){
+                let manufacturers = this.filteredManufacturers
                 // check if sort type is number or string
                 // check also if sort order is asc or desc
                 if (this.sort.type === 'id') {
-                    products = products.sort((a, b) => {
+                    manufacturers = manufacturers.sort((a, b) => {
                         return this.sort.order === 'asc' ? a.id - b.id : b.id - a.id
                     })
                 } else if (this.sort.type === 'name') {
-                    products = products.sort((a, b) => {
+                    manufacturers = manufacturers.sort((a, b) => {
                         return this.sort.order === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)
                     })
                 } else if (this.sort.type === 'price') {
-                    products = products.sort((a, b) => {
+                    manufacturers = manufacturers.sort((a, b) => {
                         return this.sort.order === 'asc' ? a.price - b.price : b.price - a.price
                     })
                 }else if(this.sort.type === 'stock'){
-                    products = products.sort((a, b) => {
+                    manufacturers = manufacturers.sort((a, b) => {
                         return this.sort.order === 'asc' ? a.stock - b.stock : b.stock - a.stock
                     })
                 }else if (this.sort.type === 'description') {
-                    products = products.sort((a, b) => {
+                    manufacturers = manufacturers.sort((a, b) => {
                         return this.sort.order === 'asc' ? a.description.localeCompare(b.description) : b.description.localeCompare(a.description)
                     })
                 }
-                // compare products created_at
-                // products = products.sort((a, b) => {
+                // compare manufacturers created_at
+                // manufacturers = manufacturers.sort((a, b) => {
                 //     return this.sort.order === 'asc' ? a.created_at - b.created_at : b.created_at - a.created_at
                 // })
-                return products
+                return manufacturers
             },
     },
     watch:{
@@ -275,17 +252,15 @@ export default {
         'pages.current_page':function(){
             this.pages.c_page = this.pages.current_page
         },
-        'temp_products':function(){
+        'temp_manufacturers':function(){
             this.pages.total = this.totalPagesFiltered
             this.temp_manufacturers = this.manufacturers
+
         },
     },
     
     methods: 
     {
-
-
-
         next(){
             if (this.pages.current_page < this.pages.total) {
                 this.pages.current_page++;
@@ -327,9 +302,9 @@ export default {
             }
         },
 
-        addProduct(product){
-            console.log(product)
-            axios.post(`http://localhost:5000/products/add`, product)
+        addManufacturer(manufacturer){
+            console.log(manufacturer)
+            axios.post(`http://localhost:5000/manufacturers/add`, manufacturer)
             .then(({data}) => {
                 // this.success = true
                 this.$emit('show-message',{
@@ -351,10 +326,10 @@ export default {
 
         },
 
-        // edit product
-        editProduct(product){
+        // edit manufacturer
+        editManufacturer(manufacturer){
             
-           axios.put(`http://localhost:5000/products/${product.id}/edit`, product)
+           axios.put(`http://localhost:5000/manufacturers/${manufacturer.id}/edit`, manufacturer)
             .then(({data}) => {
                 // this.success = true
                 this.$emit('show-message',{
@@ -363,7 +338,7 @@ export default {
                     title:'Success',
                     message:data.message
                 })
-                this.filter.search = product.name
+                this.filter.search = manufacturer.name
             })
         
             .catch(error => {
@@ -375,9 +350,9 @@ export default {
             
         },  
         
-        deleteProduct(product){
+        deleteManufacturer(manufacturer){
     
-            axios.delete(`http://localhost:5000/products/${product.id}/delete`)
+            axios.delete(`http://localhost:5000/manufacturers/${manufacturer.id}/delete`)
             .then(({data}) => {
                 // this.success = true
                 this.$emit('show-message',{
@@ -386,7 +361,7 @@ export default {
                     title:'Success',
                     message:data.message
                 })
-                this.filter.search = product.name
+                this.filter.search = manufacturer.name
             })
             .catch(error => {
                 this.errorMessage = error.response.data.message
@@ -394,20 +369,20 @@ export default {
             
         },
 
-        actionShow(showOrHide='hide',action='none',product=null){
+        actionShow(showOrHide='hide',action='none',manufacturer=null){
             // this.getManufacturers()
             if(showOrHide === 'show'){
                 this.action = showOrHide
-                this.product = product
-                if((action=='edit' || action=='add') && product!=null){
+                this.manufacturer = manufacturer
+                if((action=='edit' || action=='add') && manufacturer!=null){
                     this.action = 'show'
-                    this.product = product
+                    this.manufacturer = manufacturer
                 }
             }
             this.action = showOrHide
         },
 
-        
+        // get manufacturers from SSE server
         
     }
 }

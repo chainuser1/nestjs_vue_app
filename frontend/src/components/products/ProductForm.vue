@@ -94,4 +94,6 @@ export default {
     height:auto;
     margin:auto;
 }
+
+
 </style>

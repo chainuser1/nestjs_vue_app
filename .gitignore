@@ -2,9 +2,9 @@
 # ignore all files in node_modules except for the ones we need
 # this is a bit of a hack, but it works
 #
-/frontend/node_modules
+
 /frontend/node_modules/*
-/backend_express_api/node_modules/
+
 /backend_express_api/node_modules/*
-/backend_nest_api/node_modules/
+
 /backend_express_api/node_modules/*
