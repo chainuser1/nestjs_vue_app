@@ -161,12 +161,13 @@ export default {
         'product-form':ProductForm,
         'loading-animation':LoadingAnimation
     },
-    props: ['products','manufacturers','loading'],
+
     
     data(){
         return {
-            temp_products:this.products,
-            temp_manufacturers:this.manufacturers,
+            products:[],
+            manufacturers:[],
+            
             action:'hide',
             product:{
                 id:0,
@@ -195,15 +196,15 @@ export default {
                 current_page:1,
                 per_page:2,
             },
-
+            loading:false,
         }
     },
 
-   created(){
-       this.temp_products = this.products;
-       this.temp_manufacturers = this.manufacturers;
-       console.log(this.temp_manufacturers);
-    },
+//    created(){
+//        this.temp_products = this.products;
+//        this.temp_manufacturers = this.manufacturers;
+//        console.log(this.temp_manufacturers);
+//     },
 
     computed:{
             addOrUpdateProduct(){
@@ -219,7 +220,7 @@ export default {
 
             filteredProducts(){
                 const search = this.filter.search.toLowerCase()
-                let products = this.temp_products
+                let products = this.$store.getters.products;
                 if (search.length > 0) {
                     products = products.filter(product => {
                         return product.name.toLowerCase().includes(search)
@@ -275,10 +276,7 @@ export default {
         'pages.current_page':function(){
             this.pages.c_page = this.pages.current_page
         },
-        'temp_products':function(){
-            this.pages.total = this.totalPagesFiltered
-            this.temp_manufacturers = this.manufacturers
-        },
+
     },
     
     methods: 

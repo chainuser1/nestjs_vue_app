@@ -15,10 +15,6 @@ export class ProductsController {
         return this.productsService.getAllProducts();
     }
 
-    @Sse('sse')
-    sse(){
-        return this.productsService.sse();
-    }
 
 
     @ApiCreatedResponse({type: Products})
@@ -27,7 +23,11 @@ export class ProductsController {
         return this.productsService.getProduct(id);
     }
 
-    
+    @Sse('sse')
+    sse(){
+        return this.productsService.sse()
+    }
+
     @Post('add')
     createProduct(@Body() body:CreateProductDto) {
         return this.productsService.createProduct(body);

@@ -43,6 +43,10 @@ export default {
     
     
   },
+
+  methods:{
+      
+  }
 }
 </script>
 

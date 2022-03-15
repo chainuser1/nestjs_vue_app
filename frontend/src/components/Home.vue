@@ -23,14 +23,9 @@
         <ErrorWarning v-bind:statusClass="this.status.class" v-bind:message="this.status.message"
         v-bind:title="this.status.title"></ErrorWarning>
         <ProductPage v-if="page=='Products'"
-            v-bind:products="this.products" 
-            v-bind:loading="this.loading"
-            v-bind:manufacturers="this.manufacturers" 
             v-on:show-message="showMessage">
          </ProductPage>
         <ManufacturerPage v-if="page=='Manufacturers'" 
-            :manufacturers="this.manufacturers" 
-            v-bind:loading="this.loading"
             v-on:show-message="showMessage">
         </ManufacturerPage>
     </div>
@@ -58,9 +53,7 @@ export default {
                 class: '',
             },
 
-            products: [],
-            manufacturers: [],
-            loading:false,
+            
         }
     },
     watch: {
@@ -71,7 +64,10 @@ export default {
                     this.status.show = false;
                 }, 3000);
             }
-        }
+        },
+
+       
+        
     },
 
     created(){
@@ -92,53 +88,30 @@ export default {
             this.status.title = e.title
             this.status.message = e.message
         },
-
-
-        loadFromSSE(){
+        loadFromSSE() {
+            // commit('setLoading',true);
             let eventSource = new EventSource('http://localhost:5000/products/sse');
             // get data from eventSource
+            
             eventSource.onmessage = function(event) {
+                console.log(event)
                 let {data,lastEventId} = event 
-                if(typeof(data) !== 'undefined'){ 
-                    
-                    if(lastEventId == 1)
-                    {
-                            this.$emit('show-message',{
-                                type:'success',
-                                title:'Fetch Successfully',
-                                message:'Manufacturers fetched successfully'
-                            })
-                    }
+                 
                     console.log(lastEventId)
                     let manufacturers = JSON.parse(data).manufacturers
                     let products = JSON.parse(data).products
-                    // this.temp_manufacturers = [...manufacturers]
-                    this.manufacturers = [...manufacturers]
-                    this.products = [...products]
-                    // this.pages.total = this.totalPagesFiltered;
-                    // this.sort.type = 'id';
-                    // this.sort.order = 'desc'
-                    this.loading =  false
-                }
-                
-            }.bind(this)
+                    // setter
+                    this.$store.commit('setProducts',products)
+                    this.$store.commit('setManufacturers',manufacturers)
+                    // commit('setLoading',false)   
+            }
 
-
-            eventSource.onerror = function(event) {
-                console.log(event)
-                this.$emit('show-message', {
-                    title: 'Connection Problem',
-                    type:'error',
-                    message: 'There was a problem with the connection to the server'
-                })
-
-                this.loading=false
-                // this.manufacturers = []
-                // this.products = []
-                // eventSource.close();
-            }.bind(this)
+            eventSource.onerror = (event) =>{
+                console.log(event.type)
+            }
             
-        },
+            
+        }
     }
 }
 </script>

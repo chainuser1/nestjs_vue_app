@@ -14,7 +14,8 @@ export class ProductsService {
     constructor(
         @InjectRepository(Products) private productsRepo: Repository<Products>,
         private manufacturersService:ManufacturersService,
-        ) {}
+        ) 
+    {}
 
 
     async getAllProducts(): Promise<Products[]> {
@@ -25,8 +26,6 @@ export class ProductsService {
     }
 
     async sse(): Promise<Observable<MessageEvent>> {
-        
-        
         return interval(1530).pipe(
             map(() => {
                 const funcPro = async () => {

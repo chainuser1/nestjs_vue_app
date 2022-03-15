@@ -179,9 +179,9 @@ export default {
         }
     },
 
-    created(){
-        this.temp_manufacturers = this.manufacturers;
-    },
+    // created(){
+    //     this.temp_manufacturers = this.manufacturers;
+    // },
     computed:{
             addOrUpdateManufacturer(){
                 return this.manufacturer
