@@ -37,7 +37,7 @@ export class ProductsService {
                     data: {
                         products: [...this.products],
                         manufacturers: [...this.manufacturers],
-                        // message: "Products updated"
+                        message: "Products updated"
                     }
                 }
             }),
