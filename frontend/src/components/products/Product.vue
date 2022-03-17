@@ -192,7 +192,7 @@ export default {
                 total:0,
                 c_page:1,
                 current_page:1,
-                per_page:2,
+                per_page:3,
             },
             loading:false,
         }

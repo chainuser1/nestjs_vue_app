@@ -7,8 +7,8 @@ export class Manufacturers {
     @ApiProperty()
     id: number;
 
-    @ApiProperty({uniqueItems: true, type: String, required: true})
-    @Column({ unique: true, nullable: false })
+    @ApiProperty({uniqueItems: true,type: String, required: true, description: 'Manufacturer name'})
+    @Column({nullable: false })
     name: string;
 
     @CreateDateColumn({ type: "timestamp" })

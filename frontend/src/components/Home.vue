@@ -55,13 +55,9 @@ export default {
         }
     },
     watch: {
-        'status.show': function(newVal){
-            if(newVal){
-                // set a timer for the message to disappear
-                setTimeout(()=>{
-                    this.status.show = false;
-                }, 3000);
-            }
+        'status.show':function(){
+            // set a timer for error to disappear
+
         }
     },
 
@@ -96,10 +92,10 @@ export default {
                     
                     if(lastEventId == 1)
                     {
-                            this.$emit('show-message',{
-                                type:'success',
-                                title:'Fetch Successfully',
-                                message:'Connection Done'
+                            this.showMessage({
+                                type: 'success',
+                                title: 'Success',
+                                message: 'Data fetched successfully'
                             })
                     }
                     // console.log(lastEventId)
@@ -111,19 +107,21 @@ export default {
                 }
                 
             }.bind(this)
-
+            let errorTime=0
 
             eventSource.onerror = function() {
                 // console.log(event)
-                this.$emit('show-message', {
-                    title: 'Connection Problem',
-                    type:'error',
-                    message: 'There was a problem with the connection to the server'
+                this.showMessage({
+                    title: 'Error Connecting',
+                    // print a message and timer 
+                    message:"Retrying connection to server in " + errorTime++ +'s',
+                    type: 'error'
                 })
 
                 this.$store.commit('setLoading',true)
                 this.$store.commit('setProducts',[])
                 this.$store.commit('setManufacturers',[])
+
                 // eventSource.close();
             }.bind(this)
             

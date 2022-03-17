@@ -9,7 +9,7 @@ export class Products{
     id: number;
 
     @ApiProperty()
-    @Column({unique:true})
+    @Column()
     name: string;
 
     @ApiProperty()

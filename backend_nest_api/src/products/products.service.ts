@@ -80,6 +80,7 @@ export class ProductsService {
             product.description = body.description;
             product.manufacturerId = body.manufacturerId;
             product.updated_at = new Date();
+            
             this.productsRepo.save(product);
             message = `Product '${product.name}' updated`;
         }
