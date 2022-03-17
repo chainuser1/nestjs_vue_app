@@ -23,30 +23,25 @@
         <ErrorWarning v-bind:statusClass="this.status.class" v-bind:message="this.status.message"
         v-bind:title="this.status.title"></ErrorWarning>
         <ProductPage v-if="page=='Products'"
-            v-bind:products="this.products" 
-            v-bind:loading="this.loading"
-            v-bind:manufacturers="this.manufacturers" 
             v-on:show-message="showMessage">
          </ProductPage>
-        <ManufacturerPage v-if="page=='Manufacturers'" 
-            :manufacturers="this.manufacturers" 
-            v-bind:loading="this.loading"
+        <ManufacturersPage v-if="page=='Manufacturers'" 
             v-on:show-message="showMessage">
-        </ManufacturerPage>
+        </ManufacturersPage> 
     </div>
   </div>
 </template>
 
 <script>
 import ProductPage from './products/Product.vue'
-import ManufacturerPage from './manufacturers/Manufacturers.vue'
+import ManufacturersPage from './manufacturers/Manufacturers.vue'
 import ErrorWarning from './animation/ErrorWarning.vue'
 export default {
     name: 'HomePage',
     components:{
         ProductPage,
         ErrorWarning,
-        ManufacturerPage
+        ManufacturersPage
     },
     data(){
         return {
@@ -57,10 +52,6 @@ export default {
                 title: '',
                 class: '',
             },
-
-            products: [],
-            manufacturers: [],
-            loading:false,
         }
     },
     watch: {
@@ -76,6 +67,7 @@ export default {
 
     created(){
         this.loadFromSSE()
+        // console.log(this.$store.getters.loading)
     },
     methods:{
         goTo(page){
@@ -95,6 +87,7 @@ export default {
 
 
         loadFromSSE(){
+            this.$store.commit('setLoading',false)
             let eventSource = new EventSource('http://localhost:5000/products/sse');
             // get data from eventSource
             eventSource.onmessage = function(event) {
@@ -106,35 +99,31 @@ export default {
                             this.$emit('show-message',{
                                 type:'success',
                                 title:'Fetch Successfully',
-                                message:'Manufacturers fetched successfully'
+                                message:'Connection Done'
                             })
                     }
-                    console.log(lastEventId)
+                    // console.log(lastEventId)
                     let manufacturers = JSON.parse(data).manufacturers
                     let products = JSON.parse(data).products
-                    // this.temp_manufacturers = [...manufacturers]
-                    this.manufacturers = [...manufacturers]
-                    this.products = [...products]
-                    // this.pages.total = this.totalPagesFiltered;
-                    // this.sort.type = 'id';
-                    // this.sort.order = 'desc'
-                    this.loading =  false
+                    this.$store.commit('setManufacturers',manufacturers)
+                    this.$store.commit('setProducts',products)
+                    this.$store.commit('setLoading',false)
                 }
                 
             }.bind(this)
 
 
-            eventSource.onerror = function(event) {
-                console.log(event)
+            eventSource.onerror = function() {
+                // console.log(event)
                 this.$emit('show-message', {
                     title: 'Connection Problem',
                     type:'error',
                     message: 'There was a problem with the connection to the server'
                 })
 
-                this.loading=false
-                this.manufacturers = []
-                this.products = []
+                this.$store.commit('setLoading',true)
+                this.$store.commit('setProducts',[])
+                this.$store.commit('setManufacturers',[])
                 // eventSource.close();
             }.bind(this)
             

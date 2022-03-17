@@ -102,7 +102,7 @@
                     <!-- pagination -->
                     <ul class="pagination justify-content-center ">
                         <li class="page-item" v-if="this.pages.current_page > 1">
-                            <a class="page-link" href="#" @click.prevent="first">
+                            <a class="page-link" href="#" @click="first">
                                 <i class="fas fa-angle-double-left text-senary"></i>
                             </a>
                         </li>
@@ -123,7 +123,7 @@
                         </li>
                         
                         <li class="page-item" v-if="this.pages.current_page < this.totalPagesFiltered">
-                            <a class="page-link" href="#" @click.prevent="last">
+                            <a class="page-link" href="#" @click="last">
                                 <i class="fas fa-angle-double-right text-senary"></i>
                             </a>
                         </li>
@@ -136,7 +136,7 @@
         <div class="row" v-if="!this.loading==true">
             <div class="col-12">
                 <p class="text-secondary">
-                    Showing {{this.productsPerPage.length}} of {{this.products.length}} products
+                    Showing {{this.productsPerPage.length}} of {{this.temp_products.length}} products
                     on page {{this.pages.current_page}} of {{this.totalPagesFiltered}}
                 </p>
             </div>
@@ -161,12 +161,11 @@ export default {
         'product-form':ProductForm,
         'loading-animation':LoadingAnimation
     },
-    props: ['products','manufacturers','loading'],
     
     data(){
         return {
-            temp_products:this.products,
-            temp_manufacturers:this.manufacturers,
+            temp_products:[],
+            temp_manufacturers:[],
             action:'hide',
             product:{
                 id:0,
@@ -195,14 +194,12 @@ export default {
                 current_page:1,
                 per_page:2,
             },
-
+            loading:false,
         }
     },
 
    created(){
-       this.temp_products = this.products;
-       this.temp_manufacturers = this.manufacturers;
-       console.log(this.temp_manufacturers);
+    //    this.getProducts();
     },
 
     computed:{
@@ -275,17 +272,23 @@ export default {
         'pages.current_page':function(){
             this.pages.c_page = this.pages.current_page
         },
+        '$store.getters.loading':function(newV){
+            this.loading = newV
+        },
+        '$store.getters.products':function(newV){
+            this.temp_products = newV
+        },
+        '$store.getters.manufacturers':function(newV){
+            this.temp_manufacturers = newV
+        },
         'temp_products':function(){
             this.pages.total = this.totalPagesFiltered
-            this.temp_manufacturers = this.manufacturers
         },
     },
     
     methods: 
     {
-
-
-
+       
         next(){
             if (this.pages.current_page < this.pages.total) {
                 this.pages.current_page++;

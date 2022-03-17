@@ -30,7 +30,7 @@
 <script>
 export default {
     name : 'ManufacturerForm',
-    props: ['manufacturer','manufacturers'],
+    props: ['manufacturer'],
     data() {
         return {
             new_manufacturer: {

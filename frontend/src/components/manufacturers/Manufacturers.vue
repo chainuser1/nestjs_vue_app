@@ -92,7 +92,7 @@
                     <!-- pagination -->
                     <ul class="pagination justify-content-center ">
                         <li class="page-item" v-if="this.pages.current_page > 1">
-                            <a class="page-link" href="#" @click.prevent="first">
+                            <a class="page-link" href="#" @click="first">
                                 <i class="fas fa-angle-double-left text-senary"></i>
                             </a>
                         </li>
@@ -113,7 +113,7 @@
                         </li>
                         
                         <li class="page-item" v-if="this.pages.current_page < this.totalPagesFiltered">
-                            <a class="page-link" href="#" @click.prevent="last">
+                            <a class="page-link" href="#" @click="last">
                                 <i class="fas fa-angle-double-right text-senary"></i>
                             </a>
                         </li>
@@ -126,13 +126,13 @@
         <div class="row" v-if="!this.loading==true">
             <div class="col-12">
                 <p class="text-secondary">
-                    Showing {{this.manufacturersPerPage.length}} of {{this.manufacturers.length}} manufacturers
+                    Showing {{this.manufacturersPerPage.length}} of {{this.temp_manufacturers.length}} manufacturers
                     on page {{this.pages.current_page}} of {{this.totalPagesFiltered}}
                 </p>
             </div>
         </div>
         <manufacturer-form v-if="this.action=='show'" v-bind:manufacturer="addOrUpdateManufacturer"
-         v-on:add-manufacturer="addManufacturer" v-bind:manufacturers="this.manufacturers" v-on:update-manufacturer="editManufacturer" v-on:action-show="actionShow"></manufacturer-form>
+         v-on:add-manufacturer="addManufacturer"  v-on:update-manufacturer="editManufacturer" v-on:action-show="actionShow"></manufacturer-form>
     </div>
 </template>
 
@@ -146,15 +146,14 @@ const axios = require('axios');
 // const alertify = require("//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js");
 
 export default {
-    name: 'ManufacturerPage',
+    name: 'ManufacturersPage',
     components: {
         'manufacturer-form':ManufacturerForm,
         'loading-animation':LoadingAnimation
     },
-    props: ['manufacturers','loading'],
     data(){
         return {
-            temp_manufacturers:this.manufacturers,
+            temp_manufacturers:[],
             action:'hide',
             manufacturer:{
                 id:0,
@@ -175,12 +174,12 @@ export default {
                 current_page:1,
                 per_page:2,
             },
-          
+            loading:false,
         }
     },
 
     created(){
-        this.temp_manufacturers = this.manufacturers;
+        // this.getManufacturers()
     },
     computed:{
             addOrUpdateManufacturer(){
@@ -225,19 +224,7 @@ export default {
                     manufacturers = manufacturers.sort((a, b) => {
                         return this.sort.order === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)
                     })
-                } else if (this.sort.type === 'price') {
-                    manufacturers = manufacturers.sort((a, b) => {
-                        return this.sort.order === 'asc' ? a.price - b.price : b.price - a.price
-                    })
-                }else if(this.sort.type === 'stock'){
-                    manufacturers = manufacturers.sort((a, b) => {
-                        return this.sort.order === 'asc' ? a.stock - b.stock : b.stock - a.stock
-                    })
-                }else if (this.sort.type === 'description') {
-                    manufacturers = manufacturers.sort((a, b) => {
-                        return this.sort.order === 'asc' ? a.description.localeCompare(b.description) : b.description.localeCompare(a.description)
-                    })
-                }
+                } 
                 // compare manufacturers created_at
                 // manufacturers = manufacturers.sort((a, b) => {
                 //     return this.sort.order === 'asc' ? a.created_at - b.created_at : b.created_at - a.created_at
@@ -252,15 +239,20 @@ export default {
         'pages.current_page':function(){
             this.pages.c_page = this.pages.current_page
         },
-        'temp_manufacturers':function(){
+        '$store.getters.loading':function(newV){
+            this.loading = newV
+        },
+        '$store.getters.manufacturers':function(newV){
+            this.temp_manufacturers = newV
+        },
+        'temp_products':function(){
             this.pages.total = this.totalPagesFiltered
-            this.temp_manufacturers = this.manufacturers
-
         },
     },
     
     methods: 
     {
+       
         next(){
             if (this.pages.current_page < this.pages.total) {
                 this.pages.current_page++;
