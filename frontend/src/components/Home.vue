@@ -133,8 +133,8 @@ export default {
                 })
 
                 this.loading=false
-                // this.manufacturers = []
-                // this.products = []
+                this.manufacturers = []
+                this.products = []
                 // eventSource.close();
             }.bind(this)
             
